@@ -1,14 +1,8 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persist } from 'zustand/middleware';
+import type { GroceryItem } from '../types';
 
-type GroceryItem = {
-  price: Number;
-  id: string;
-  name: string;
-  quantity: number;
-  category: string;
-};
 
 type GroceryStore = {
   items: GroceryItem[];
