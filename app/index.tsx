@@ -5,8 +5,6 @@ import { useGroceryStore } from './store/grocery-store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { FormatCurrency } from './types/index';
 import Toast from 'react-native-toast-message';
-import BackButton from './components/ui/BackButton';
-import Header from './components/ui/Header';
 
 export default function HomeScreen() {
   const { top } = useSafeAreaInsets();
@@ -55,6 +53,13 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.receiptTitle}>GROCERIES</Text>
+      <View style={{ marginTop: 20 }}>
+      <Link href="/templates">
+        <TouchableOpacity style={{ padding: 10, backgroundColor: '#00b809', borderRadius: 5 }}>
+          <Text style={{ color: '#fff', fontWeight: 'bold' }}>Manage Templates</Text>
+        </TouchableOpacity>
+      </Link>
+    </View>
       {items.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>No items yet...</Text>
@@ -67,9 +72,14 @@ export default function HomeScreen() {
           renderItem={({ item }) => (
             <View style={styles.itemCard}>
               <View style={{ flex: 1 }}>
-                <Text style={styles.itemText}>{item.name.toUpperCase()}</Text>
+              <Text style={styles.itemText}>
+                {item.name
+                  .split(' ')
+                  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(' ')}
+              </Text>
                 <Text style={styles.itemSubText}>
-                  {item.quantity} x {formatCurrency(item.price)}
+                  {item.quantity} x {formatCurrency(item.price)} • {item.category}
                 </Text>
               </View>
               <View style={styles.itemPriceContainer}>
