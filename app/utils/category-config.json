@@ -53,7 +53,9 @@
       "chicken breast", "chicken thigh", "beef steak", "ground beef", "pork chop", 
       "pork loin", "mutton", "salmon", "tuna", "cod", "tilapia", "turkey", "lamb", 
       "sausage", "bacon", "ham", "shrimp", "crab", "lobster", "duck", "venison", 
-      "scallops", "clams", "oysters", "ground turkey", "chicken wings", "pork ribs"
+      "scallops", "clams", "oysters", "ground turkey", "chicken wings", "pork ribs",
+      "meatballs", "hot dogs", "fish fillet", "chicken tenders", "squid",
+      "pork", "ham", "beef", "chicken", "wors"
     ],
     "Grains": [
       "white rice", "brown rice", "jasmine rice", "pasta", "spaghetti", "penne", 
