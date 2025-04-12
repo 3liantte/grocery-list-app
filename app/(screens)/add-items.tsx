@@ -10,7 +10,7 @@ const AddItemsScreen = () => {
   const [quantity, setQuantity] = useState('');
   const [price, setPrice] = useState('');
   const [discount, setDiscount] = useState(''); // Discount state
-  const [discountType, setDiscountType] = useState('fixed'); // Discount type state (fixed or percentage)
+  const [discountType, setDiscountType] = useState<'fixed' | 'percentage'>('fixed'); // Discount type state (fixed or percentage)
 
   const router = useRouter();
   const addItem = useGroceryStore((state) => state.addItem);
@@ -60,7 +60,10 @@ const AddItemsScreen = () => {
       name: itemName,
       quantity: parsedQuantity,
       price: finalPrice,
-      discount: undefined
+      discount: discount ? {
+        type: discountType,
+        value: Number.parseFloat(discount),
+      } : undefined, // Include discount details if provided
     };
 
     addItem(newItem);

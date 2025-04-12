@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useGroceryStore } from '../store/grocery-store';
 import Toast from 'react-native-toast-message';
 import Header from '../components/ui/Header';
+import { categorizeItem } from '../utils/categorizeItem';
 
 export default function EditItemScreen() {
   const { id } = useLocalSearchParams();
@@ -90,6 +91,8 @@ export default function EditItemScreen() {
       price: finalPrice, // Updated price with discount
       discount: Number.parseFloat(discount), // Save discount if applicable
       discountType, // Save the discount type
+      category: name !== getItemById?.name
+      ? categorizeItem(name) : getItemById?.category ?? "Others", // Update category if name changed
     };
 
     updateItem(updatedItem);

@@ -2,24 +2,51 @@ import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persist } from 'zustand/middleware';
 import type { GroceryItem } from '../types';
+import { categorizeItem } from '../utils/categorizeItem';
+import uuid from "react-native-uuid";
 
+type TemplateList = {
+  id: string;
+  name: string;
+  items: GroceryItem[];
+};
 
 type GroceryStore = {
   items: GroceryItem[];
+  templateLists: TemplateList[];
   addItem: (item: GroceryItem) => void;
   removeItem: (id: string) => void;
   updateItem: (item: GroceryItem) => void;
+  saveTemplateList: (name: string) => void;
 };
 
 export const useGroceryStore = create<GroceryStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       items: [],
+      templateLists: [],
 
-      addItem: (item) =>
+      addItem: (item) => {
+        const categorizedItem = {
+          ...item,
+          id: uuid.v4().toString(),
+          category: categorizeItem(item.name),
+        };
         set((state) => ({
-          items: [...state.items, item],
-        })),
+          items: [...state.items, categorizedItem],
+        }));
+      },
+
+      saveTemplateList: (name) => {
+        const newTemplate: TemplateList = {
+          id: uuid.v4().toString(),
+          name,
+          items: get().items.map((item) => ({ ...item })), // Deep copy
+        };
+        set((state) => ({
+          templateLists: [...state.templateLists, newTemplate],
+        }));
+      },
 
       removeItem: (id) =>
         set((state) => ({
@@ -34,7 +61,7 @@ export const useGroceryStore = create<GroceryStore>()(
         })),
     }),
     {
-      name: 'grocery-storage', // Key in AsyncStorage
+      name: 'grocery-storage',
       storage: {
         getItem: async (name) => {
           const value = await AsyncStorage.getItem(name);
