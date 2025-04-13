@@ -89,8 +89,10 @@ export default function EditItemScreen() {
       name,
       quantity: parsedQuantity,
       price: finalPrice, // Updated price with discount
-      discount: Number.parseFloat(discount), // Save discount if applicable
-      discountType, // Save the discount type
+      discount: {
+        type: discountType as "fixed" | "percentage",
+        value: Number.parseFloat(discount)
+      },
       category: name !== getItemById?.name
       ? categorizeItem(name) : getItemById?.category ?? "Others", // Update category if name changed
     };

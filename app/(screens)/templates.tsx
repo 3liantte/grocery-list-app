@@ -14,6 +14,7 @@ export default function TemplatesScreen() {
   const loadTemplate = (templateId: string) => {
     const template = templateLists.find((tpl) => tpl.id === templateId);
     if (template) {
+      // biome-ignore lint/complexity/noForEach: <explanation>
       template.items.forEach((item) => {
         addItem(item); // Add item to the list
       });

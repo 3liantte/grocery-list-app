@@ -1,15 +1,18 @@
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { Link } from 'expo-router';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { Link, useRouter } from 'expo-router';
 import { Feather, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { useGroceryStore } from './store/grocery-store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { FormatCurrency } from './types/index';
 import Toast from 'react-native-toast-message';
+import { useState } from 'react';
 
 export default function HomeScreen() {
+  const router = useRouter();
   const { top } = useSafeAreaInsets();
   const items = useGroceryStore((state) => state.items);
   const removeItem = useGroceryStore((state) => state.removeItem);
+  const [templateName, setTemplateName] = useState("");
 
   // Robust rounding function to prevent floating-point precision errors
   const roundToTwo = (num: number) => {
@@ -50,15 +53,44 @@ export default function HomeScreen() {
     });
   };
 
+  const handleSaveTemplate = () => {
+    if (templateName.trim() === " "){
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Template Name is required",
+      });
+      return;
+    }
+    useGroceryStore.getState().saveTemplateList(templateName);
+    Toast.show({
+      type: "success",
+      position: "top",
+      text1: "Template saved!",
+    });
+    setTemplateName(" "); //Resets template name
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.receiptTitle}>GROCERIES</Text>
       <View style={{ marginTop: 20 }}>
-      <Link href="/templates">
-        <TouchableOpacity style={{ padding: 10, backgroundColor: '#00b809', borderRadius: 5 }}>
-          <Text style={{ color: '#fff', fontWeight: 'bold' }}>Manage Templates</Text>
-        </TouchableOpacity>
-      </Link>
+        <View style={styles.templateButtons}>
+          <TouchableOpacity 
+            onPress={() => router.push("/templates")}
+            style={{ padding: 10, width: "160", backgroundColor: '#00b809', borderRadius: 5 }}>
+            <Text style={{ color: '#fff', fontWeight: 'bold' }}>Manage Templates</Text>
+          </TouchableOpacity>
+
+          <TextInput
+          style={styles.input}
+          placeholder="Template Name"
+          value={templateName}
+          onChangeText={setTemplateName}/>
+          <TouchableOpacity onPress={handleSaveTemplate} style={styles.saveButton}>
+            <Text style={{ color: "#fff", fontWeight: "bold" }}>Save Template</Text>
+          </TouchableOpacity>
+        </View>
     </View>
       {items.length === 0 ? (
         <View style={styles.emptyContainer}>
@@ -228,5 +260,22 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 8,
     backgroundColor: '#d1e7dd', // Light green
+  },
+  templateButtons: {
+    paddingTop: 0,
+    paddingBottom: 10,
+  },
+  input: {
+    height: 40,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  saveButton: {
+    backgroundColor: '#00b809',
+    padding: 10,
+    borderRadius: 5,
   },
 });
