@@ -1,9 +1,9 @@
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Link, useRouter } from 'expo-router';
-import { Feather, FontAwesome, Ionicons } from '@expo/vector-icons';
-import { useGroceryStore } from './store/grocery-store';
+import { Feather, Ionicons } from '@expo/vector-icons';
+import { useGroceryStore } from '@/store/grocery-store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import type { FormatCurrency } from './types/index';
+import type { FormatCurrency } from '../types/index';
 import Toast from 'react-native-toast-message';
 import { useState } from 'react';
 
@@ -72,56 +72,54 @@ export default function HomeScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.receiptTitle}>GROCERIES</Text>
-      <View style={{ marginTop: 20 }}>
+<View style={styles.container}>
+  <Text style={styles.receiptTitle}>GROCERIES</Text>
+
+  {/* Optional spacer */}
+  <View style={{ marginTop: 20 }} />
+
+  {items.length === 0 ? (
+    <View style={styles.emptyContainer}>
+      <Text style={styles.emptyText}>No items yet...</Text>
     </View>
-      {items.length === 0 ? (
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>No items yet...</Text>
+  ) : (
+    <FlatList
+      data={items}
+      keyExtractor={(item) => item.id}
+      contentContainerStyle={{ paddingBottom: 160 }}
+      renderItem={({ item }) => (
+        <View style={styles.itemCard}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.itemText}>
+              {item.name
+                .split(' ')
+                .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ')}
+            </Text>
+            <Text style={styles.itemSubText}>
+              {item.quantity} x {formatCurrency(item.price)} • {item.category}
+            </Text>
+          </View>
+          <View style={styles.itemPriceContainer}>
+            <Text style={styles.itemText}>
+              {formatCurrency(item.price * item.quantity)}
+            </Text>
+            <Link href={{ pathname: '/edit-item/[id]', params: { id: item.id } }} asChild>
+              <TouchableOpacity style={styles.editButton}>
+                <Feather name="edit-2" size={20} color="#00b809" />
+              </TouchableOpacity>
+            </Link>
+            <TouchableOpacity
+              onPress={() => handleDelete(item.id)}
+              style={styles.deleteButton}
+            >
+              <Feather name="x" size={20} color="red" />
+            </TouchableOpacity>
+          </View>
         </View>
-      ) : (
-        <FlatList
-          data={items}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingBottom: 160 }} // Make space for footer
-          renderItem={({ item }) => (
-            <View style={styles.itemCard}>
-              <View style={{ flex: 1 }}>
-              <Text style={styles.itemText}>
-                {item.name
-                  .split(' ')
-                  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                  .join(' ')}
-              </Text>
-                <Text style={styles.itemSubText}>
-                  {item.quantity} x {formatCurrency(item.price)} • {item.category}
-                </Text>
-              </View>
-              <View style={styles.itemPriceContainer}>
-                <Text style={styles.itemText}>
-                  {formatCurrency(item.price * item.quantity)} {/* Price * Quantity */}
-                </Text>
-
-                {/* Edit Button */}
-                <Link href={{ pathname: '/edit-item/[id]', params: { id: item.id } }} asChild>
-                  <TouchableOpacity style={styles.editButton}>
-                    <Feather name="edit-2" size={20} color="#00b809" />
-                  </TouchableOpacity>
-                </Link>
-
-                {/* Delete Button */}
-                <TouchableOpacity
-                  onPress={() => handleDelete(item.id)} // Delete item on press
-                  style={styles.deleteButton}
-                >
-                  <Feather name="x" size={20} color="red" />
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-        />
       )}
+    />
+  )}
 
       {/* Footer Section */}
       <View style={styles.footer}>
