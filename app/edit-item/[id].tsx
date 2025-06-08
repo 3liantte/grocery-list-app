@@ -1,10 +1,10 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { useGroceryStore } from '../store/grocery-store';
+import { useGroceryStore } from '@/store/grocery-store';
 import Toast from 'react-native-toast-message';
 import Header from '../components/ui/Header';
-import { categorizeItem } from '../utils/categorizeItem';
+import { categorizeItem } from '../../utils/categorizeItem';
 
 export default function EditItemScreen() {
   const { id } = useLocalSearchParams();
