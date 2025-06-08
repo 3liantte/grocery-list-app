@@ -75,22 +75,6 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <Text style={styles.receiptTitle}>GROCERIES</Text>
       <View style={{ marginTop: 20 }}>
-        <View style={styles.templateButtons}>
-          <TouchableOpacity 
-            onPress={() => router.push("/templates")}
-            style={{ padding: 10, width: 160, backgroundColor: '#00b809', borderRadius: 5 }}>
-            <Text style={{ color: '#fff', fontWeight: 'bold' }}>Manage Templates</Text>
-          </TouchableOpacity>
-
-          <TextInput
-          style={styles.input}
-          placeholder="Template Name"
-          value={templateName}
-          onChangeText={setTemplateName}/>
-          <TouchableOpacity onPress={handleSaveTemplate} style={styles.saveButton}>
-            <Text style={{ color: "#fff", fontWeight: "bold" }}>Save Template</Text>
-          </TouchableOpacity>
-        </View>
     </View>
       {items.length === 0 ? (
         <View style={styles.emptyContainer}>
