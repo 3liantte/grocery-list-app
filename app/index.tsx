@@ -78,7 +78,7 @@ export default function HomeScreen() {
         <View style={styles.templateButtons}>
           <TouchableOpacity 
             onPress={() => router.push("/templates")}
-            style={{ padding: 10, width: "160", backgroundColor: '#00b809', borderRadius: 5 }}>
+            style={{ padding: 10, width: 160, backgroundColor: '#00b809', borderRadius: 5 }}>
             <Text style={{ color: '#fff', fontWeight: 'bold' }}>Manage Templates</Text>
           </TouchableOpacity>
 
