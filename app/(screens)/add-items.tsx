@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useGroceryStore } from '../store/grocery-store';
-import type { GroceryItem } from '../types';
+import { useGroceryStore } from '@/store/grocery-store';
+import type { GroceryItem } from '../../types';
 import Header from '../components/ui/Header';
 
 const AddItemsScreen = () => {
